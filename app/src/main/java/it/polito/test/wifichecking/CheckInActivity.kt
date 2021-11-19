@@ -22,10 +22,15 @@ class CheckInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_check_in)
 
+        val sharedPreferences = applicationContext.getSharedPreferences("AppSharedPreference", Context.MODE_PRIVATE)
+        val savedNamePerson = sharedPreferences.getString("namePerson", "under-determined")
         val db = Firebase.firestore
         val now = DateTime.now()
         val input = hashMapOf(now.toString() to "IN")
-        db.collection("testShortcuts").document(now.toString()).set(input, SetOptions.merge())
+
+        if (savedNamePerson != "under-determined") {
+            db.collection("testShortcuts").document(savedNamePerson.toString()).set(input, SetOptions.merge())
+        }
 
         Toast.makeText(applicationContext, "You check-in action has been recorded", Toast.LENGTH_LONG).show()
 
