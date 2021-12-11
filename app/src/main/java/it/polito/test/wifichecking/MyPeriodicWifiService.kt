@@ -43,8 +43,10 @@ class MyPeriodicWifiService(context: Context, workerParameters: WorkerParameters
             val documentPath = inputData.getString("document").toString()
             val netID = wifiInfo.networkId
             if (netID != -1 && collectionPath == ssid) {
-                val input = hashMapOf(now.toString() to "CONNECTED")
-                db.collection(collectionPath).document(documentPath).set(input, SetOptions.merge())
+                val input1 = hashMapOf(now.toString() to "CONNECTED")
+                val input2 = hashMapOf("timestamp" to now.toString(), "presence" to "CONNECTED")
+                db.collection(collectionPath).document("$documentPath+WIFI").set(input1, SetOptions.merge())
+                db.collection(collectionPath).document(documentPath).collection("WIFI").document(now.toString()).set(input2, SetOptions.merge())
             }
 
 //            if (netID != -1) {

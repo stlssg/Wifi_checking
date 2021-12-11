@@ -94,7 +94,9 @@ class MainActivity : AppCompatActivity() {
 
             val db = Firebase.firestore
             val input = hashMapOf("SSID" to inputSSID, "Maximum_expected_number" to maxPresence)
+            val initialInput = hashMapOf("UserName" to namePerson, "startTime" to "07:00", "stopTime" to "23:00")
             db.collection(inputSSID).document("Building_Information").set(input, SetOptions.merge())
+            db.collection(inputSSID).document(namePerson).set(initialInput, SetOptions.merge())
 
             myWorkManager(namePerson, inputSSID)
 
@@ -184,7 +186,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val myRequest = PeriodicWorkRequestBuilder<MyPeriodicWifiService>(15, TimeUnit.MINUTES)
-            .setInputData(workDataOf("collection" to ssid, "Time_Start" to "07:00", "Time_End" to "23:00", "document" to "$namePerson+WIFI"))
+            .setInputData(workDataOf("collection" to ssid, "Time_Start" to "07:00", "Time_End" to "23:00", "document" to namePerson))
             .setConstraints(constraints)
             .addTag("periodicWork")
 //            .setInitialDelay(10, TimeUnit.SECONDS)
